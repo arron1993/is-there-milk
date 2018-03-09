@@ -1,0 +1,95 @@
+<html>
+<head>
+<style>
+body {
+    background: url('/static/images/cow_{{image_num}}.jpg') no-repeat center;
+    background-size: cover;
+    font-family: Arial;
+}
+button {
+    background-color: rgba(255, 255, 255, 1);
+
+    border: 1px solid;
+    width: 160px;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 1.5em;
+    margin-right: 25px;
+    margin-left: 25px;
+}
+
+button:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+    <audio id="moo-sound" preload="auto">
+        <source src="/static/audio/moo_2.mp3"></source>
+    </audio>
+    <div id="container" style="margin: auto;width:100%" >
+        <div id="title" style="width:100%;text-align:center">
+            <h1>Is there any milk?</h1>
+        </div>
+        <div id="content">
+            <div id="display" style="width:100%; height:60%">
+                <div style="text-align:center">
+                    <svg width="700" height="500">
+                        <g transform="translate(350, 20)">
+                            <circle id="status-circle" cy="150" r=150 stroke="black" stroke-width="3" fill="white" />
+                            <text font-size="2.5em" id="status-text" y="150" text-anchor="middle"></text>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+            <div id="buttons" style="text-align:center;">
+                <button id="yes-button">Yes</button>
+                <button id="almost-button">Almost Out</button>
+                <button id="no-button">No</button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        function updateButtonStatus() {
+            $.get('/status').done(function(data) {
+                $('#status-text').text(data)
+
+                status_map = {'yes': '#7bf702',
+                              'no': 'red',
+                              'a bit': 'orange'}
+
+                $('#status-circle').attr('fill', status_map[data])
+            });
+        }
+
+        $('#yes-button').click(function(){
+            $.post('/set_yes')
+            updateButtonStatus()
+            $('#moo-sound')[0].play();
+        })
+
+        $('#no-button').click(function(){
+            $.post('/set_no')
+            updateButtonStatus()
+            $('#moo-sound')[0].play();
+        })
+
+        $('#almost-button').click(function(){
+            $.post('/set_almost')
+            updateButtonStatus()
+            $('#moo-sound')[0].play();
+        })
+
+        function mainUpdateLoop() {
+            updateButtonStatus()
+            setTimeout(mainUpdateLoop, 1000)
+        }
+        mainUpdateLoop()
+    });
+    </script>
+</body>
+</html>
