@@ -1,4 +1,5 @@
 Quick and silly flask based app for setting and viewing the current fridge based milk status
 
+docker build . -t istheremilk
 
-Requires a pip3 install -r requirements.txt and probably a sudo apt install redis
+./docker_start.sh
