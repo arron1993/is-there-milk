@@ -12,19 +12,19 @@ $(document).ready(function() {
     }
 
     $('#yes-button').click(function(){
-        $.post('/set_yes')
+        $.post('/yes')
         updateButtonStatus()
         //~ $('#moo-sound')[0].play();
     })
 
     $('#no-button').click(function(){
-        $.post('/set_no')
+        $.post('/no')
         updateButtonStatus()
         //~ $('#moo-sound')[0].play();
     })
 
     $('#almost-button').click(function(){
-        $.post('/set_almost')
+        $.post('/almost')
         updateButtonStatus()
         //~ $('#moo-sound')[0].play();
     })
